@@ -36,7 +36,7 @@ Installation
     If you're using Plone...
 
         1. Go to your-plone-site -> site setup -> Add/Remove Products,
-           and install AutoUserMakerPASPlugin.
+           and install AutoUserMakerPASPlugin
 
     If you're not using Plone...
 

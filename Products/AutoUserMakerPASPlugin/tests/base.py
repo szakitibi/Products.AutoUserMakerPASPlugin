@@ -5,7 +5,6 @@ from plone.app.testing import FunctionalTesting
 from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing.bbb import PloneTestCase
-from plone.testing import z2
 
 
 class ProductsAutousermakerpaspluginLayer(PloneSandboxLayer):

@@ -1,12 +1,26 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:zcml="http://namespaces.zope.org/zcml"
            xmlns:i18n="http://namespaces.zope.org/i18n"
-           xmlns:gs="http://namespaces.zope.org/genericsetup"
+           xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
            i18n_domain="AutoUserMakerPASPlugin">
-
 
   <i18n:registerTranslations directory="locales"/>
 
+  <genericsetup:registerProfile
+    name="default"
+    directory="profiles/default"
+    title="AutoUserMakerPASPlugin"
+    description="Automatically generate members on login in Plone."
+    post_handler=".setuphandlers.install"
+    provides="Products.GenericSetup.interfaces.EXTENSION" />
 
+  <genericsetup:registerProfile
+    name="uninstall"
+    title="AutoUserMakerPASPlugin (uninstall)"
+    directory="profiles/uninstall"
+    description="Uninstalls AutoUserMakerPASPlugin"
+    pre_handler=".setuphandlers.uninstall"
+    provides="Products.GenericSetup.interfaces.EXTENSION"
+    />
 
 </configure>
