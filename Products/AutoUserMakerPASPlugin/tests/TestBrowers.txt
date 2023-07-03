@@ -39,7 +39,7 @@ Now we set up the browser. Then we make sure the default user is a manager, and
 add the login header. By telling the testbrowser not to handle errors, we will
 get more output in the event one happens.
 
-    >>> from plone.testing.z2 import Browser
+    >>> from plone.testing.zope import Browser
     >>> browser = Browser(layer['app'])
     >>> browser.addHeader('Authorization', 'Basic %s:%s' % (SITE_OWNER_NAME, SITE_OWNER_PASSWORD))
 
