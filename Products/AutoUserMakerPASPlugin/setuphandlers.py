@@ -1,10 +1,22 @@
 """Used in installing AutoUserMakerPASPlugin."""
+from Products.CMFPlone.interfaces import INonInstallable
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
+from zope.interface import implementer
 from zope.interface import alsoProvides
 from zope.globalrequest import getRequest
 
 from .Extensions import Install
+
+
+@implementer(INonInstallable)
+class HiddenProfiles(object):
+
+    def getNonInstallableProfiles(self):
+        """Hide uninstall profile from site-creation and quickinstaller."""
+        return [
+            'Products.AutoUserMakerPASPlugin:uninstall',
+        ]
 
 
 def install(context):

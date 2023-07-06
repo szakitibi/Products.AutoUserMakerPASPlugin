@@ -23,4 +23,9 @@
     provides="Products.GenericSetup.interfaces.EXTENSION"
     />
 
+  <utility
+      factory=".setuphandlers.HiddenProfiles"
+      name="Products.AutoUserMakerPASPlugin-hiddenprofiles"
+      />
+
 </configure>
