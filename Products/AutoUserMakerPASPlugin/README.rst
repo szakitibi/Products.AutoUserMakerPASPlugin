@@ -29,36 +29,23 @@ Installation
 
 1. Install ``Products.AutoUserMakerPASPlugin`` by adding it to your buildout:
 
-```
-[buildout]
+::
 
-...
+    [buildout]
 
-eggs =
-    Products.AutoUserMakerPASPlugin
-```
+    ...
 
-2. Restart Zope.
+    eggs =
+        Products.AutoUserMakerPASPlugin
 
-3. Install the plugin:
+    ...
 
-    If you're using Plone...
+    [sources]
+    Products.AutoUserMakerPASPlugin = git git@github.com:szakitibi/Products.AutoUserMakerPASPlugin.git branch=python3
 
-        1. Go to your-plone-site -> site setup -> Add/Remove Products,
-           and install AutoUserMakerPASPlugin
+2. Run ``bin/buildout``.
 
-    If you're not using Plone...
-
-        1. In the Zope Management Interface, navigate to your-plone-site ->
-           acl_users.
-
-        2. Add an Auto User Maker to the folder.
-
-        3. Navigate to your-plone-site -> acl_users -> plugins ->
-           Authentication Plugins.
-
-        2. Go to the Activate tab of your newly created Auth User Make instance,
-           and turn on Authentication and Extraction.
+3. Start Plone and install the plugin in the Add-ons control panel.
 
 4. Set up the required Apache directives. For example:
 
