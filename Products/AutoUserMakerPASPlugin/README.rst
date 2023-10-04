@@ -20,14 +20,23 @@ able to authenticate, read on.
 Requirements
 ============
 
-* Plone 4.1 to 5.1 are tested and supported
+* Plone 5.2 and Python 3.8 tested
 
-* I test this with Shibboleth, currently 2.0 service provider.
+* Tom Gross tested this with Shibboleth, currently 2.0 service provider in 2010
 
 Installation
 ============
 
-1. Unzip the AutoUserMakerPASPlugin.zip file in $INSTANCE_HOME/Products.
+1. Install ``Products.AutoUserMakerPASPlugin`` by adding it to your buildout:
+
+```
+[buildout]
+
+...
+
+eggs =
+    Products.AutoUserMakerPASPlugin
+```
 
 2. Restart Zope.
 
@@ -381,7 +390,7 @@ Admitting only certain users
 
 If you want to admit only a subset of the users that Apache recognizes...
 
-1. In the ZMI, click your *ApacheAuthPluginHandler* instance.
+1. In the ZMI, click your *AutoUserMakerPASPlugin* instance.
 
 2. Click the Properties tab.
 
