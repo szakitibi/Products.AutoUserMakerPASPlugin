@@ -8,6 +8,7 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
 manage_addAutoUserMakerForm = PageTemplateFile('add-AutoUserMakerPASPlugin.zpt', globals())
 
+
 def manage_addAutoUserMaker(self, pluginId, title='', REQUEST=None):
     """Add an Auto User Maker to a Pluggable Auth Service."""
 

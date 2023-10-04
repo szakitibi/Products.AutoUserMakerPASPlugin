@@ -1,8 +1,7 @@
-from plone import api
-from Products.AutoUserMakerPASPlugin.auth import ApacheAuthPluginHandler
 from Products.AutoUserMakerPASPlugin.auth import httpEmailKey
 from Products.AutoUserMakerPASPlugin.Extensions.Install import PLUGIN_ID as pluginId
-from Products.AutoUserMakerPASPlugin.tests.base import PluginTestCase
+from Products.AutoUserMakerPASPlugin.testing import PluginTestCase
+from plone import api
 
 
 class AutoUserMakerPASPluginTests(PluginTestCase):
@@ -46,7 +45,6 @@ class AutoUserMakerPASPluginTests(PluginTestCase):
         response = DummyResp()
         self.assertFalse(response.url)
 
-
         # Authenticated already
         request.authenticated = True
         self.plugin.challenge(request, response)
@@ -69,5 +67,3 @@ class AutoUserMakerPASPluginTests(PluginTestCase):
     def test_prop_upgrade(self):
         setattr(self.plugin, httpEmailKey, 'as attr')
         self.assertEqual(self.plugin.getConfig()[httpEmailKey], ('as attr',))
-
-# EOF

@@ -21,7 +21,9 @@ __revision__ = "0.2"
 from mod_python import apache
 
 import re
-import six.moves.urllib.request, six.moves.urllib.parse, six.moves.urllib.error
+import six.moves.urllib.request
+import six.moves.urllib.parse
+import six.moves.urllib.error
 
 
 # Customize these
@@ -31,6 +33,7 @@ _rSkip = re.compile(r'^/(shibboleth-(sp|idp)|Shibboleth.sso|SAML|WAYF|server-(st
 _dHosts = {'alan.ithaka.org': '127.0.0.1:8301', 'test.ithaka.org': '127.0.0.1:8253'}
 # This maps the host name provided by the browser to the path to plone in zope.
 _dPaths = {'alan.ithaka.org': 'test', 'test.ithaka.org': 'test'}
+
 
 def fixuphandler(req):
     # This implements a negative RewriteCond to not redirect certain paths.

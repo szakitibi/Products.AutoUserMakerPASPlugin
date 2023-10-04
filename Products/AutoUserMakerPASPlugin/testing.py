@@ -13,7 +13,7 @@ class ProductsAutousermakerpaspluginLayer(PloneSandboxLayer):
 
     def setUpZope(self, app, configurationContext):
         import Products.AutoUserMakerPASPlugin
-        # self.loadZCML(package=Products.AutoUserMakerPASPlugin)
+        self.loadZCML(package=Products.AutoUserMakerPASPlugin)
 
     def setUpPloneSite(self, portal):
         quickinstaller = api.portal.get_tool(name='portal_quickinstaller')
@@ -33,6 +33,7 @@ class PluginTestCase(PloneTestCase):
     """ Base class for AutoUserMakerPASPlugin tests """
 
     layer = AUTOUSERMAKERPASPLUGIN_FUNCTIONAL_TESTING
+
 
 PluginFunctionalTestCase = PluginTestCase
 

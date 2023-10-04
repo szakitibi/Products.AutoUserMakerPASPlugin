@@ -112,6 +112,7 @@ class AutoUserMakerPASPlugin(BasePlugin):
         return ''.join([choice(PWCHARS) for ii in range(10)])
 
     security.declarePrivate('authenticateCredentials')
+
     def authenticateCredentials(self, credentials):
         """See class's docstring and IAuthenticationPlugin."""
 
@@ -139,14 +140,14 @@ class AutoUserMakerPASPlugin(BasePlugin):
                 userAdders = self.plugins.listPlugins(IUserAdderPlugin)
                 if not userAdders:
                     raise NotImplementedError("I wanted to make a new user, but"
-                                            " there are no PAS plugins active"
-                                            " that can make users.")
+                                              " there are no PAS plugins active"
+                                              " that can make users.")
                 roleAssigners = self.plugins.listPlugins(IRoleAssignerPlugin)
                 if not roleAssigners:
                     raise NotImplementedError("I wanted to make a new user and give"
-                                            " him the Member role, but there are"
-                                            " no PAS plugins active that assign"
-                                            " roles to users.")
+                                              " him the Member role, but there are"
+                                              " no PAS plugins active that assign"
+                                              " roles to users.")
 
                 # Add the user to the first IUserAdderPlugin that works:
                 user = None
@@ -156,7 +157,7 @@ class AutoUserMakerPASPlugin(BasePlugin):
                         user = self._getPAS().getUser(userId)
                         try:
                             membershipTool = getToolByName(self,
-                                                        'portal_membership')
+                                                           'portal_membership')
                             if not membershipTool.getHomeFolder(userId):
                                 membershipTool.createMemberArea(userId)
                         except (ConflictError, KeyboardInterrupt):
@@ -213,7 +214,7 @@ class AutoUserMakerPASPlugin(BasePlugin):
                             curAssigner.doAssignRoleToPrincipal(user.getId(), role)
                         except _SWALLOWABLE_PLUGIN_EXCEPTIONS:
                             logger.warning('RoleAssigner %s error' % curAssignerId,
-                                        exc_info=True)
+                                           exc_info=True)
 
                 source_groups = getToolByName(self, 'source_groups')
                 for ii in groups:
@@ -225,13 +226,13 @@ class AutoUserMakerPASPlugin(BasePlugin):
                     with safe_write(self.REQUEST):
                         self._updateUserProperties(user, credentials)
 
-        #Allow other plugins to handle credentials; eg session or cookie
+        # Allow other plugins to handle credentials; eg session or cookie
         pas.updateCredentials(self.REQUEST,
                               self.REQUEST.RESPONSE, userId, "")
         return userId, userId
 
-
     security.declarePublic('loginUrl')
+
     def loginUrl(self, currentUrl):
         """Given the URL of the page where the user presently is,
         return the URL which will prompt him for authentication
@@ -248,23 +249,23 @@ class AutoUserMakerPASPlugin(BasePlugin):
         match = re.match(pattern, currentUrl)
         # Let the web server's auth have a swing at it:
         if match:  # will usually start with http:// but may start with
-                   # https://  (and thus not match) if you're already
-                   # logged in and try to access something you're not privileged to
+            # https://  (and thus not match) if you're already
+            # logged in and try to access something you're not privileged to
             try:
                 destination = match.expand(replacement)
             except re.error:  # Don't screw up your replacement string, please.
-                              #  If you do, we at least try not to punish the user with a traceback.
+                #  If you do, we at least try not to punish the user with a traceback.
                 if usingCustomRedirection:
                     logger.error("Your custom WebServerAuth Replacement "
-                                 "Pattern could not be applied to a URL " \
+                                 "Pattern could not be applied to a URL "
                                  "which needs authentication: %s. Please correct it." % currentUrl)
             else:
                 return destination
         # Our regex didn't match, or something went wrong.
         return ''
 
-
     security.declarePrivate('challenge')
+
     def challenge(self, request, response):
         # Just Start a challenge, if not logged yet
         if request.getHeader(httpRemoteUserKey, None) == None:
@@ -275,7 +276,9 @@ class AutoUserMakerPASPlugin(BasePlugin):
         # Pass off control to the next challenge plugin.
         return False
 
+
 classImplements(AutoUserMakerPASPlugin, IAuthenticationPlugin, IChallengePlugin)
+
 
 class MockUser:
     """Used in ExtractionPlugin.extractCredentials for testing.
@@ -288,6 +291,7 @@ class MockUser:
     >>> user.getGroups()
     ()
     """
+
     def __init__(self, sUserId):
         self.sUserId = sUserId
 
@@ -302,6 +306,7 @@ class MockUser:
     def getUserName(self):
         """The id is the name in our case """
         return self.sUserId
+
 
 class ExtractionPlugin(BasePlugin, PropertyManager):
     """ A simple extraction plugin that retrieves its credentials
@@ -328,6 +333,7 @@ class ExtractionPlugin(BasePlugin, PropertyManager):
         self.authzMappings = PersistentList()
 
     security.declareProtected(ManageUsers, 'getConfig')
+
     def getConfig(self):
         """ Return a mapping of my configuration values, for use in a
             page template.
@@ -366,13 +372,13 @@ class ExtractionPlugin(BasePlugin, PropertyManager):
         config = (
             (stripDomainNamesKey, 'int', 'w', 1),
             (stripDomainNamesListKey, lines_type, 'w', []),
-            (httpRemoteUserKey, lines_type, 'w', ['HTTP_X_REMOTE_USER',]),
-            (httpCommonnameKey, lines_type, 'w', ['HTTP_SHIB_PERSON_COMMONNAME',]),
-            (httpDescriptionKey, lines_type, 'w', ['HTTP_SHIB_ORGPERSON_TITLE',]),
-            (httpEmailKey, lines_type, 'w', ['HTTP_SHIB_INETORGPERSON_MAIL',]),
-            (httpLocalityKey, lines_type, 'w', ['HTTP_SHIB_ORGPERSON_LOCALITY',]),
-            (httpStateKey, lines_type, 'w', ['HTTP_SHIB_ORGPERSON_STATE',]),
-            (httpCountryKey, lines_type, 'w', ['HTTP_SHIB_ORGPERSON_C',]),
+            (httpRemoteUserKey, lines_type, 'w', ['HTTP_X_REMOTE_USER', ]),
+            (httpCommonnameKey, lines_type, 'w', ['HTTP_SHIB_PERSON_COMMONNAME', ]),
+            (httpDescriptionKey, lines_type, 'w', ['HTTP_SHIB_ORGPERSON_TITLE', ]),
+            (httpEmailKey, lines_type, 'w', ['HTTP_SHIB_INETORGPERSON_MAIL', ]),
+            (httpLocalityKey, lines_type, 'w', ['HTTP_SHIB_ORGPERSON_LOCALITY', ]),
+            (httpStateKey, lines_type, 'w', ['HTTP_SHIB_ORGPERSON_STATE', ]),
+            (httpCountryKey, lines_type, 'w', ['HTTP_SHIB_ORGPERSON_C', ]),
             (autoUpdateUserPropertiesKey, 'int', 'w', 0),
             (autoUpdateUserPropertiesIntervalKey, 'int', 'w', 24*60*60),
             (httpAuthzTokensKey, lines_type, 'w', []),
@@ -436,6 +442,7 @@ class ExtractionPlugin(BasePlugin, PropertyManager):
         return val
 
     security.declarePublic('getSharingConfig')
+
     def getSharingConfig(self):
         """Return the items end users can use to share with.
 
@@ -449,6 +456,7 @@ class ExtractionPlugin(BasePlugin, PropertyManager):
                 httpSharingLabelsKey: self.getProperty(httpSharingLabelsKey, ())}
 
     security.declareProtected(ManageUsers, 'getTokens')
+
     def getTokens(self):
         """Return http_authz_tokens as a tupple (how getProperty returns it).
 
@@ -461,6 +469,7 @@ class ExtractionPlugin(BasePlugin, PropertyManager):
         return self.getProperty(httpAuthzTokensKey, ())
 
     security.declareProtected(ManageUsers, 'getMapping')
+
     def getMapping(self):
         """ Get a default empty mapping
 
@@ -470,12 +479,13 @@ class ExtractionPlugin(BasePlugin, PropertyManager):
         [('groupid', []), ('roles', {}), ('userid', ''), ('values', {}), ('version', 1)]
         """
         return {'version': 1,
-                 'values': {},
-                 'roles': {},
-                 'userid': '',
-                 'groupid': []}
+                'values': {},
+                'roles': {},
+                'userid': '',
+                'groupid': []}
 
     security.declareProtected(ManageUsers, 'getMappings')
+
     def getMappings(self):
         """Return authzMappings as a persistent list of dictionaries.
 
@@ -488,6 +498,7 @@ class ExtractionPlugin(BasePlugin, PropertyManager):
         return self.authzMappings
 
     security.declareProtected(ManageUsers, 'listMappings')
+
     def listMappings(self):
         """Return authzMappings as a list of dictionaries.
 
@@ -500,18 +511,21 @@ class ExtractionPlugin(BasePlugin, PropertyManager):
         return list(self.authzMappings)
 
     security.declareProtected(ManageUsers, 'putMappings')
+
     def putMappings(self, authz):
         """Save the input as authzMappings."""
         self.authzMappings = PersistentList(authz)
         self._p_changed = 1
 
     security.declareProtected(ManageUsers, 'addMappings')
+
     def addMappings(self, authz):
         """Append the input to authzMappings."""
         self.authzMappings.append(authz)
         self._p_changed = 1
 
     security.declarePrivate('requiredRoles')
+
     def requiredRoles(self):
         """Extract the required roles from the property.
 
@@ -524,6 +538,7 @@ class ExtractionPlugin(BasePlugin, PropertyManager):
         return self.getProperty('required_roles', ())
 
     security.declarePrivate('loginUsers')
+
     def loginUsers(self):
         """Extract the login users from the property.
 
@@ -536,10 +551,12 @@ class ExtractionPlugin(BasePlugin, PropertyManager):
         return self.getProperty('login_users', ())
 
     security.declarePrivate('defaultRoles')
+
     def defaultRoles(self):
         return self.getProperty('default_roles', ['Member'])
 
     security.declarePrivate('extractCredentials')
+
     def extractCredentials(self, request):
         """Search a Zope request for Shibboleth tokens. See IExtractionPlugin.
 
@@ -572,8 +589,8 @@ class ExtractionPlugin(BasePlugin, PropertyManager):
             nameDomain = user[usernameKey].split('@', 1)
             if len(nameDomain) == 1 or \
                config[stripDomainNamesKey] == 1 or \
-               (config[stripDomainNamesKey] == 2 and \
-                nameDomain[1] in config[stripDomainNamesListKey]):
+               (config[stripDomainNamesKey] == 2 and
+                    nameDomain[1] in config[stripDomainNamesListKey]):
                 user[usernameKey] = nameDomain[0]
 
         # build a location value
@@ -656,7 +673,9 @@ class ExtractionPlugin(BasePlugin, PropertyManager):
 
         return user
 
+
 classImplements(ExtractionPlugin, IExtractionPlugin)
+
 
 class ApacheAuthPluginHandler(AutoUserMakerPASPlugin, ExtractionPlugin):
     """An aggregation of all the available apache PAS plugins."""
@@ -681,9 +700,10 @@ class ApacheAuthPluginHandler(AutoUserMakerPASPlugin, ExtractionPlugin):
     # Add a tab that calls that method:
     manage_options = ({'label': 'Options', 'action': 'manage_config'},
                       {'label': 'AuthZ', 'action': 'manage_authz'}) \
-                     + BasePlugin.manage_options
+        + BasePlugin.manage_options
 
     security.declareProtected(ManageUsers, 'getRoles')
+
     def getRoles(self):
         """Return a list of roles.
 
@@ -702,6 +722,7 @@ class ApacheAuthPluginHandler(AutoUserMakerPASPlugin, ExtractionPlugin):
         return portalRoleManager.enumerateRoles()
 
     security.declareProtected(ManageUsers, 'getUsers')
+
     def getUsers(self):
         """Return the list of current users.
 
@@ -719,6 +740,7 @@ class ApacheAuthPluginHandler(AutoUserMakerPASPlugin, ExtractionPlugin):
         return users
 
     security.declareProtected(ManageUsers, 'getGroups')
+
     def getGroups(self):
         """Return the list of current groups.
 
@@ -737,6 +759,7 @@ class ApacheAuthPluginHandler(AutoUserMakerPASPlugin, ExtractionPlugin):
         return list(sourceGroups.getGroupIds())
 
     security.declareProtected(ManageUsers, 'getValue')
+
     def getValue(self, authz, kind, col):
         """Return the given configuration item as a string.
 
@@ -748,6 +771,7 @@ class ApacheAuthPluginHandler(AutoUserMakerPASPlugin, ExtractionPlugin):
             return ''
 
     security.declareProtected(ManageUsers, 'manage_changeConfig')
+
     def manage_changeConfig(self, REQUEST=None):
         """Update my configuration based on form data.
 
@@ -762,11 +786,11 @@ class ApacheAuthPluginHandler(AutoUserMakerPASPlugin, ExtractionPlugin):
             return None
         reqget = REQUEST.form.get
         strip = safeToInt(reqget(stripDomainNamesKey, 1), default=1)
-        strip = max(min(strip, 2), 0) # 0 < x < 2
+        strip = max(min(strip, 2), 0)  # 0 < x < 2
         autoupdate = safeToInt(reqget(autoUpdateUserPropertiesKey, 0),
-                              default=0)
+                               default=0)
         autoupdate_interval = safeToInt(reqget(autoUpdateUserPropertiesIntervalKey, 0),
-                              default=0)
+                                        default=0)
         # If Shib fields change, then update the authz_mappings property.
         tokens = self.getTokens()
         formTokens = tuple(reqget(httpAuthzTokensKey, '').splitlines())
@@ -780,7 +804,8 @@ class ApacheAuthPluginHandler(AutoUserMakerPASPlugin, ExtractionPlugin):
                         saveVals[jj] = ''
                 ii['values'] = saveVals
         # Save the form values
-        self.manage_changeProperties({stripDomainNamesKey: strip,
+        self.manage_changeProperties({
+            stripDomainNamesKey: strip,
             stripDomainNamesListKey: reqget(stripDomainNamesListKey, ''),
             httpRemoteUserKey: reqget(httpRemoteUserKey, ''),
             httpCommonnameKey: reqget(httpCommonnameKey, ''),
@@ -799,11 +824,13 @@ class ApacheAuthPluginHandler(AutoUserMakerPASPlugin, ExtractionPlugin):
             challengePatternKey: reqget(challengePatternKey, ''),
             challengeHeaderEnabledKey: reqget(challengeHeaderEnabledKey, False),
             challengeHeaderNameKey: reqget(challengeHeaderNameKey, ''),
-            defaultRolesKey: reqget(defaultRolesKey, '')})
+            defaultRolesKey: reqget(defaultRolesKey, '')
+        })
         return REQUEST.RESPONSE.redirect('%s/manage_config' %
                                          self.absolute_url())
 
     security.declareProtected(ManageUsers, 'manage_changeMapping')
+
     def manage_changeMapping(self, REQUEST=None):
         """Update mappings based on form data.
 
@@ -829,7 +856,7 @@ class ApacheAuthPluginHandler(AutoUserMakerPASPlugin, ExtractionPlugin):
             match = self.rKey.match(ii)
             if not match:
                 continue
-            index =  int(match.group(2))
+            index = int(match.group(2))
             if len(sets) < index + 1:
                 for jj in range(len(sets), index + 1):
                     sets.append(self.getMapping())
@@ -874,6 +901,7 @@ class ApacheAuthPluginHandler(AutoUserMakerPASPlugin, ExtractionPlugin):
                                          self.absolute_url())
 
     security.declareProtected(ManageUsers, 'manage_addMapping')
+
     def manage_addMapping(self, REQUEST=None):
         """Add a mapping based on form data.
 
@@ -892,7 +920,7 @@ class ApacheAuthPluginHandler(AutoUserMakerPASPlugin, ExtractionPlugin):
             return REQUEST.RESPONSE.redirect('%s/manage_authz' %
                                              self.absolute_url())
         saveVals['values'] = dict(
-		[(key, value) for key, value in zip(self.getTokens(), auth)])
+                [(key, value) for key, value in zip(self.getTokens(), auth)])
         # loop through getRoles ensures no input other than currently
         # valid roles
         for role in self.getRoles():
@@ -902,10 +930,11 @@ class ApacheAuthPluginHandler(AutoUserMakerPASPlugin, ExtractionPlugin):
             saveVals['userid'] = userid
         groups = self.getGroups()
         saveVals['groupid'] = [group for group in reqget('groupid', [])
-				     if group in groups]
+                               if group in groups]
         self.addMappings(saveVals)
         return REQUEST.RESPONSE.redirect('%s/manage_authz' %
                                          self.absolute_url())
+
 
 InitializeClass(ApacheAuthPluginHandler)
 
@@ -932,5 +961,5 @@ def _registered_objects(request):
          # skip the 'temporary' connection since it stores session objects
          # which get written all the time
          for name, conn in app._p_jar.connections.items() if name != 'temporary'
-        ]
+         ]
     ))

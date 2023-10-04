@@ -1,7 +1,11 @@
 2.2 (unreleased)
 ================
 
-- Nothing changed yet.
+- Provide missing install profile
+  [szakitibi]
+
+- Python 3, Plone 5.2 support
+  [pbauer]
 
 
 2.1.1 (2017-02-01)

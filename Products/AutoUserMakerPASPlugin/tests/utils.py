@@ -12,6 +12,7 @@ def _firstIdOfClass(container, class_):
             return id
     return None
 
+
 def addAutoUserMakerPASPlugin(context):
     """Find the nearest acl_users and adds and activates an Auto User Maker.
 
