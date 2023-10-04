@@ -22,7 +22,9 @@ class HiddenProfiles(object):
 def install(context):
     # context can be portal_setup, so make sure to get portal
     portal = api.portal.get()
-    alsoProvides(getRequest(), IDisableCSRFProtection)
+    request = getRequest()
+    if request:
+        alsoProvides(request, IDisableCSRFProtection)
     Install.install(portal)  # adds plugin to acl_users
 
 
